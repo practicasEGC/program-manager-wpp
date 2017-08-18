@@ -3,6 +3,5 @@ require('metamodel.php');
 require('readers.php');
 require('writers.php');
 
-XLSXProgramReader reader = new XLSXProgramReader();
-Program p = reader.parseProgram;
-write_program(p);
+$reader = new XLSXProgramReader('./programme-pre-v9.xlsx','./programme-pre-v9.xlsx');
+write_program($reader->parseProgram());

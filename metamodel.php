@@ -1,45 +1,59 @@
 <?php
 
-class Program
+
+class Slot
 {
-  public $day_slots_map;
+  public $time;
+  public $talks_groups;
 
-
+  public function __construct($time,$talks_groups)
+  {
+    $this->time=$time;
+    $this->talks_groups=$talks_groups;
+  }
 
 }
+class TalkGroup
+{
+  public $title;
+  public $talks;
 
-class Slot // This class represents the simplest event
+  public function __construct($title,$talks)
+  {
+    $this->title=$title;
+    $this->talks=$talks;
+  }
+}
+
+class Talk
 {
   public $time;
   public $title;
-}
+  public $event;
+  public $code;
+  public $authors;
+  public $abstract;
 
-class Session extends Slot
-{
-   public String[] $talks;
-   public String $chair;
 
-   public function __construct($time, $title, $talks, $chair)
-   {
-       parent::__construct($time, $title);
-       $this->talks = $talks;
-       $this->chair = $chair;
-   }
-
-   public function __toString()
-   {
-       $res="";
-       $this->;
-       return $res;
-   }
-}
-
-class Talk extends Slot
-{
-
-  public function __construct($time, $title, $, $)
+  public function __construct($time,$title,$event,$code, $authors, $abstract)
   {
-      parent::__construct($time, $title);
+      $this->time=$time;
+      $this->title=$title;
+      $this->event=$event;
+      $this->code=$code;
+      $this->authors=$authors;
+      $this->abstract=$abstract;
+  }
+}
 
+class Pause
+{
+  public $time;
+  public $title;
+
+  public function __construct($time,$title)
+  {
+      $this->time=$time;
+      $this->title=$title;
   }
 }
