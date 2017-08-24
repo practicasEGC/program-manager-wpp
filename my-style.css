@@ -1,0 +1,48 @@
+.slot{
+	border:1px solid #a81c41;
+	width:100%;
+	display: flex;
+}
+.time_details{
+    text-transform:uppercase;
+    padding-left:1%;
+    flex: 0 0 18%;
+  }
+
+.sessions{
+	flex: 1;
+	border-left: 1px solid #a81c41;
+}
+
+.session{
+	border-bottom:1px solid #fff;
+
+}
+.talk_authors{
+	font-style: italic;
+}
+.session_name{
+	background:#a81c41;
+	color: #FFF;
+	padding-left: 10px;
+}
+
+.talk{
+	font-weight: 500;
+	border-bottom:1px solid #a81c41;
+	padding: 10px;
+
+
+}
+
+.talk_data{
+	font-size: 80%;
+}
+.talk_pre{
+	font-weight: 500;
+	width: 33%;
+	float: left;
+	border-left:1px solid #a81c41;
+  height:100%;
+	padding: 10px;
+}

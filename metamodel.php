@@ -1,5 +1,17 @@
 <?php
 
+class Day
+{
+	public $day_details;
+	public $is_Pre;
+	public $slots;
+
+	public function __construct($day_details,$is_Pre,$slots){
+		$this->day_details=$day_details;
+		$this->is_Pre=$is_Pre;
+		$this->slots=$slots;
+	}
+}
 
 class Slot
 {
@@ -17,6 +29,7 @@ class TalkGroup
 {
   public $title;
   public $talks;
+  public $url;
 
   public function __construct($title,$talks)
   {
@@ -33,7 +46,7 @@ class Talk
   public $code;
   public $authors;
   public $abstract;
-
+  public $timming;
 
   public function __construct($time,$title,$event,$code, $authors, $abstract)
   {
