@@ -1,6 +1,8 @@
 <?php
 /*
-Plugin Name: Program manager plugin 2
+Plugin Name: Program manager plugin
+Author: José  Ángel Galindo Duarte
+Version: 2.0
 */
 
 require('metamodel.php');
@@ -14,14 +16,13 @@ add_shortcode( 'write_reve_program', 'write_reve' );
 add_shortcode( 'write_dspl_program', 'write_dspl' );
 add_shortcode( 'write_array_program', 'write_debug' );
 
-
 add_action( 'wp_enqueue_scripts', 'my_plugin_register_scripts' );
 
+wp_enqueue_script( 'media-upload'); 
 
+//This creates a page for settings
 if( is_admin() )
     $my_settings_page = new MySettingsPage();
-
-
 
 function my_plugin_register_scripts(){
      wp_register_script('my-script',plugins_url( '/my-script.js', __FILE__ ), false, '1.0', 'all' );
@@ -29,68 +30,77 @@ function my_plugin_register_scripts(){
 }
 
 function write_full(){
-
+	
 	date_default_timezone_set('UTC');
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
 
 
-	$reader = new XLSXProgramReader('./wp-content/plugins/program-manager-wpp/programme-pre-v9.xlsx','./wp-content/plugins/program-manager-wpp/programme-main-v10.xlsx');
-	$program=$reader->parseProgram(array('Monday','Tuesday'),array('Wednesday','Thursday','Friday'));
+	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
+	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new FullProgramWriter($program); 
 	$writer->write();
 }
 
 function write_debug(){
-
-	$reader = new XLSXProgramReader('./wp-content/plugins/program-manager-wpp/programme-pre-v9.xlsx','./wp-content/plugins/program-manager-wpp/programme-main-v10.xlsx');
-	$program=$reader->parseProgram(array('Monday','Tuesday'),array('Wednesday','Thursday','Friday'));
+	
+	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
+	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new DebugProgramWriter($program); 
 	$writer->write();
 
 }
 
 function write_reve(){
-
+	
 	date_default_timezone_set('UTC');
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
 
 
-	$reader = new XLSXProgramReader('./wp-content/plugins/program-manager-wpp/programme-pre-v9.xlsx','./wp-content/plugins/program-manager-wpp/programme-main-v10.xlsx');
-	$program=$reader->parseProgram(array('Monday','Tuesday'),array('Wednesday','Thursday','Friday'));
-	//$writer=new PartialProgramWriter($program,"Doctoral Symposium"); 
+	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
+	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new PartialProgramWriter($program,"REVE"); 
 	$writer->write();
 }
 
 
 function write_dspl(){
-
+	
 	date_default_timezone_set('UTC');
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
 
-
-	$reader = new XLSXProgramReader('./wp-content/plugins/program-manager-wpp/programme-pre-v9.xlsx','./wp-content/plugins/program-manager-wpp/programme-main-v10.xlsx');
-	$program=$reader->parseProgram(array('Monday','Tuesday'),array('Wednesday','Thursday','Friday'));
-	//$writer=new PartialProgramWriter($program,"Doctoral Symposium"); 
+	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
+	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new PartialProgramWriter($program,"DSPL"); 
 	$writer->write();
 }
 
 
 function write_dc(){
-
 	date_default_timezone_set('UTC');
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
 
-
-	$reader = new XLSXProgramReader('./wp-content/plugins/program-manager-wpp/programme-pre-v9.xlsx','./wp-content/plugins/program-manager-wpp/programme-main-v10.xlsx');
-	$program=$reader->parseProgram(array('Monday','Tuesday'),array('Wednesday','Thursday','Friday'));
-	//$writer=new PartialProgramWriter($program,"Doctoral Symposium"); 
+	$plugin_options=get_option('program_manager_option');
+	$pre_days=explode(",",$plugin_options['pre_days']);	
+	$main_days=explode(",",$plugin_options['main_days']);
+	$pre_xlsx=str_replace(get_option('siteurl'),".",$plugin_options['pre_days_file']);	
+	$main_xlsx=str_replace(get_option('siteurl'),'.',$plugin_options['main_days_file']);		
+	
+//	print_r($pre_days);print_r($main_days);print($pre_xlsx);print($main_xlsx);die();
+	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
+	$program=$reader->parseProgram($pre_days,$main_days);	
 	$writer=new PartialProgramWriter($program,"Doctoral Symposium"); 
 	$writer->write();
+}
+
+function extractVariables(){
+	$plugin_options=get_option('program_manager_option');
+	$pre_days=explode(",",$plugin_options['pre_days']);	
+	$main_days=explode(",",$plugin_options['main_days']);
+	$pre_xlsx=str_replace(get_option('site_url'),'.',$plugin_options['pre_days_file']);	
+	$main_xlsx=str_replace(get_option('site_url'),'.',$plugin_options['pre_days_file']);		
 }
 
