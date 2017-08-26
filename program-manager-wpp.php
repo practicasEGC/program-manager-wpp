@@ -35,7 +35,12 @@ function write_full(){
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
 
-
+	$plugin_options=get_option('program_manager_option');
+	$pre_days=explode(",",$plugin_options['pre_days']);	
+	$main_days=explode(",",$plugin_options['main_days']);
+	$pre_xlsx=str_replace(get_option('siteurl'),".",$plugin_options['pre_days_file']);	
+	$main_xlsx=str_replace(get_option('siteurl'),'.',$plugin_options['main_days_file']);		
+	
 	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
 	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new FullProgramWriter($program); 
@@ -43,7 +48,12 @@ function write_full(){
 }
 
 function write_debug(){
-	
+	$plugin_options=get_option('program_manager_option');
+	$pre_days=explode(",",$plugin_options['pre_days']);	
+	$main_days=explode(",",$plugin_options['main_days']);
+	$pre_xlsx=str_replace(get_option('siteurl'),".",$plugin_options['pre_days_file']);	
+	$main_xlsx=str_replace(get_option('siteurl'),'.',$plugin_options['main_days_file']);		
+		
 	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
 	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new DebugProgramWriter($program); 
@@ -57,7 +67,12 @@ function write_reve(){
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
 
-
+	$plugin_options=get_option('program_manager_option');
+	$pre_days=explode(",",$plugin_options['pre_days']);	
+	$main_days=explode(",",$plugin_options['main_days']);
+	$pre_xlsx=str_replace(get_option('siteurl'),".",$plugin_options['pre_days_file']);	
+	$main_xlsx=str_replace(get_option('siteurl'),'.',$plugin_options['main_days_file']);		
+	
 	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
 	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new PartialProgramWriter($program,"REVE"); 
@@ -70,7 +85,12 @@ function write_dspl(){
 	date_default_timezone_set('UTC');
 	wp_enqueue_style( 'my-style' );
 	wp_enqueue_script( 'my-script' );
-
+	$plugin_options=get_option('program_manager_option');
+	$pre_days=explode(",",$plugin_options['pre_days']);	
+	$main_days=explode(",",$plugin_options['main_days']);
+	$pre_xlsx=str_replace(get_option('siteurl'),".",$plugin_options['pre_days_file']);	
+	$main_xlsx=str_replace(get_option('siteurl'),'.',$plugin_options['main_days_file']);		
+	
 	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
 	$program=$reader->parseProgram($pre_days,$main_days);
 	$writer=new PartialProgramWriter($program,"DSPL"); 
