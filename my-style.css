@@ -46,3 +46,12 @@
   height:100%;
 	padding: 10px;
 }
+
+.glance_program{
+display:flex;
+font-size:12px;
+}
+.glance_day{
+flex:1;
+margin-left:5px;
+}

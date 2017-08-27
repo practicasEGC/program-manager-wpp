@@ -74,7 +74,108 @@ class PartialProgramWriter
 
 }
 
+class GlanceProgramWriter{
 
+	private $program;
+	
+	public function __construct($program){
+		$this->program=$program;
+	
+	}
+	
+
+	function write(){ 
+
+		$day_index=0;
+		echo "<div class=\"glance_program\">";
+		foreach($this->program as $day => $program_day){
+		echo "<div class=\"glance_day\" >";
+
+			echo "<div><b>". $program_day->day_details ."</b></div>";// we print the date
+			
+			if($program_day->is_Pre){
+				$this->process_pre_day($program_day->slots);
+			}else{
+				$this->process_main_day($program_day->slots);		
+			}
+
+		echo "</div>";
+		}
+		echo "</div>";
+	}
+
+
+	function process_main_day($slots){
+
+			foreach($slots as $slot_object)
+			{	
+				$unique_elements= array();
+	
+				echo "<div class=\"slot\">";
+				echo "<div class=\"sessions\">";
+				foreach ($slot_object->talks_groups as $talk_group) {
+					if($talk_group instanceof Pause){
+						echo "<div class=\"session\">";
+						echo "<div class=\"session_name\">".$talk_group->title. '</div>';
+						echo '</div>';
+					}else if($talk_group instanceof TalkGroup){
+						foreach($talk_group->talks as $talk){
+							$unique_elements[]=$talk->event;
+						}
+	
+					}
+				
+				}
+				$unique_elements=array_unique($unique_elements);
+				 
+
+				foreach($unique_elements as $elem){
+					echo"<div class=\"talk\">".$elem."</div>";
+				}
+				echo "</div>";
+				echo "</div>";
+			}
+		
+
+
+	}
+	function process_pre_day($slots){
+
+			foreach($slots as $slot_object)
+			{	
+				$unique_elements= array();
+							
+				echo "<div class=\"slot\">";
+				echo "<div class=\"sessions\">";
+				foreach ($slot_object->talks_groups as $talk_group) {
+					if($talk_group instanceof Pause){
+						echo "<div class=\"session\">";
+						echo "<div class=\"session_name\">".$talk_group->title. '</div>';
+						echo '</div>';
+					}else if($talk_group instanceof TalkGroup){
+						foreach($talk_group->talks as $talk){
+							$unique_elements[]=$talk->event;
+						}
+					}
+				}
+				$unique_elements=array_unique($unique_elements);
+
+				 
+
+				foreach($unique_elements as $elem){
+					echo"<div class=\"talk\">".$elem."</div>";
+				}
+				
+							
+				
+				echo "</div>";
+				echo "</div>";
+			}
+		
+
+
+	}
+}
 class FullProgramWriter{
 
 	private $program;
