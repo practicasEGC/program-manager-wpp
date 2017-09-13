@@ -28,13 +28,17 @@ class Slot
 class TalkGroup
 {
   public $title;
+  public $chair;
   public $talks;
   public $url;
+  public $room;
 
-  public function __construct($title,$talks)
+  public function __construct($title,$talks,$chair,$room)
   {
     $this->title=$title;
     $this->talks=$talks;
+    $this->chair=$chair;
+    $this->room=$room;
   }
 }
 

@@ -26,7 +26,13 @@
 	color: #FFF;
 	padding-left: 10px;
 }
-
+.session_details{
+	background:#a81c41;
+	color: #FFF;
+	padding-left: 10px;
+	font-style: italic;
+	
+}
 .talk{
 	font-weight: 500;
 	border-bottom:1px solid #a81c41;

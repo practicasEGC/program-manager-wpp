@@ -34,9 +34,11 @@ class PartialProgramWriter
 
 
 	function process_day($slots,$result){
-			foreach($slots as $slot_object)
+			$numberofslots=0;
+		        foreach($slots as $slot_object)
 			{	
 
+				$numberofslots=$numberofslots+1;
 				$result.= "<div class=\"slot\">";
 				$result.= "<div class=\"time_details\">" . $slot_object->time . '</div> ' ; //imprime hora + espacio
 				$result.= "<div class=\"sessions\">";
@@ -46,7 +48,7 @@ class PartialProgramWriter
 						if($talk_group instanceof Pause){
 							$result.= "<div class=\"session\">";
 							$result.= "<div class=\"session_name\">".$talk_group->title. '</div>';
-							$result.= '</div>';
+						        $result.= '</div>';
 						}else if($talk_group instanceof TalkGroup &&(trim($talk_group->title) == trim($this->allowed_name)) ){
 							
 							$result.= "<div class=\"session\"></div>";    
@@ -63,13 +65,17 @@ class PartialProgramWriter
 								}
 						}
 					
+					
 				}
 				$result.= "</div></div>";
-		
+				
+				//the counter is hardcoded. bad design :S		
+				if(strpos($result, 'talk') !== false && $numberofslots<5){
+					echo $result;
+					$result='';
+				}
+
 			}
-			if(strpos($result, 'talk') !== false){
-				echo $result;
-			}		
 	}
 
 }
@@ -237,9 +243,13 @@ class FullProgramWriter{
 					if($talk_group instanceof Pause){
 						echo "<div class=\"session\">";
 						echo "<div class=\"session_name\">".$talk_group->title. '</div>';
+					       		
 						echo '</div>';
 					}else if($talk_group instanceof TalkGroup){
-					echo "<div class=\"session\"><div class=\"session_name\">".$talk_group->title."</div></div>";    
+						echo "<div class=\"session\">".
+							"<div class=\"session_name\">".$talk_group->title."</div>".
+							"<div class=\"session_details\">Chair: ".$talk_group->chair. '- Room:'.$talk_group->room .'</div>'.
+						"</div>";    
 		 
 					foreach($talk_group->talks as $talk){
 							$not_allowed = array("");

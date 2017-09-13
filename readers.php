@@ -8,7 +8,7 @@ class XLSXProgramReader
   protected $pre_day_talks;
   protected $main_day_xlsx;
   protected $main_day_talks;
-
+  protected $main_day_chairs;
 
   public function __construct($pre_file_path,$main_file_path)
   {
@@ -16,6 +16,8 @@ class XLSXProgramReader
     $this->pre_day_talks =$this->pre_day_xlsx->getSheet("Talks")->getData();
     $this->main_day_xlsx=new XLSXReader($main_file_path);
     $this->main_day_talks =$this->main_day_xlsx->getSheet("Talks")->getData();
+    $this->main_day_chairs =$this->main_day_xlsx->getSheet("Sessions")->getData();
+   
   } 
   
 
@@ -41,7 +43,7 @@ class XLSXProgramReader
         $time=$row[0]; //imprime hora + espacio
         $talks_group = array();
         if (strpos($row[1], '(') !== FALSE){//contiene charlas
- 		$group=new TalkGroup($this->getTitle($row[1]),$this->process_talks($this->getCode($row[1]),$time,$isPre));
+ 		$group=new TalkGroup($this->getTitle($row[1]),$this->process_talks($this->getCode($row[1]),$time,$isPre),$this->search_chair($this->getCode($row[1])),$this->search_room($this->getCode($row[1])));
 		$group->url=$this->getURL($row[1]);
 		$talks_group[]=$group;	    
 	}else{//si no contiene charlas es porque el titulo la incluye
@@ -51,12 +53,12 @@ class XLSXProgramReader
 
         }
         if (strpos($row[2], '(') !== FALSE){//contiene charlas
-	  $group=new TalkGroup($this->getTitle($row[2]),$this->process_talks($this->getCode($row[2]),$time,$isPre));		
+	  $group=new TalkGroup($this->getTitle($row[2]),$this->process_talks($this->getCode($row[2]),$time,$isPre),$this->search_chair($this->getCode($row[2])),$this->search_room($this->getCode($row[2])));		
 	  $group->url=$this->getURL($row[2]);
 	  $talks_group[]=$group; 
         }
         if (strpos($row[3], '(') !== FALSE){//contiene charlas ... hay que ver como guardar el nombre del slot si existe
-	  $group= new TalkGroup($this->getTitle($row[3]),$this->process_talks($this->getCode($row[3]),$time,$isPre));
+	  $group= new TalkGroup($this->getTitle($row[3]),$this->process_talks($this->getCode($row[3]),$time,$isPre),$this->search_chair($this->getCode($row[2])),$this->search_room($this->getCode($row[3])));
 	  $group->url=$this->getURL($row[3]);
 	  $talks_group[]=$group;
 	}
@@ -70,6 +72,25 @@ class XLSXProgramReader
 	return new Day($day_details,$isPre,$day_slots);
 
   }
+
+  function search_chair($data){
+  	 foreach($this->main_day_chairs as $chair) {
+		 if($chair[0]==$data){
+			return $chair[1].' '.$chair[2]; 
+		 }
+	 }
+	return '';
+  }
+
+  function search_room($data){
+  	 foreach($this->main_day_chairs as $chair) {
+		 if($chair[0]==$data){
+			return $chair[3]; 
+		 }
+	 }
+	return '';
+  }
+
 
   function process_talks($data,$time,$is_Pre){
     $talks_collection= array();
