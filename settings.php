@@ -13,6 +13,22 @@ class MySettingsPage
     {
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'page_init' ) );
+        if( is_admin() ) {
+        	function my_admin_load_styles_and_scripts() {
+        		$mode = get_user_option( 'media_library_mode', get_current_user_id() ) ? get_user_option( 'media_library_mode', get_current_user_id() ) : 'grid';
+        		$modes = array( 'grid', 'list' );
+        			if ( isset( $_GET['mode'] ) && in_array( $_GET['mode'], $modes ) ) {
+            				$mode = $_GET['mode'];
+            				update_user_option( get_current_user_id(), 'media_library_mode', $mode );
+        			}
+        		if( ! empty ( $_SERVER['PHP_SELF'] ) && 'upload.php' === basename( $_SERVER['PHP_SELF'] ) && 'grid' !== $mode ) {
+            			wp_dequeue_script( 'media' );
+        		}
+        	wp_enqueue_media();
+    		}
+    	add_action( 'admin_enqueue_scripts', 'my_admin_load_styles_and_scripts' );
+	}
+  
     }
 
     /**
@@ -62,16 +78,15 @@ class MySettingsPage
 
 <script>
     jQuery(document).ready(function($){
-
-
-    var pre_custom_uploader;
     var main_custom_uploader;
+        var pre_custom_uploader;
+ 
 
 
     $('#pre_upload_file_button').click(function(e) {
          
         e.preventDefault();
-
+  
         //If the uploader object has already been created, reopen the dialog
         if (pre_custom_uploader) {
             pre_custom_uploader.open();
@@ -79,7 +94,7 @@ class MySettingsPage
         }
 
         //Extend the wp.media object
-        pre_custom_uploader = wp.media.frames.file_frame = wp.media({
+        pre_custom_uploader =  wp.media.frames.file_frame = wp.media({
             title: 'Choose File',
             button: {
                 text: 'Choose File'
@@ -103,8 +118,7 @@ class MySettingsPage
     $('#main_upload_file_button').click(function(e) {
          
         e.preventDefault();
-
-        //If the uploader object has already been created, reopen the dialog
+            //If the uploader object has already been created, reopen the dialog
         if (main_custom_uploader) {
             main_custom_uploader.open();
             return;

@@ -34,11 +34,18 @@ class PartialProgramWriter
 
 
 	function process_day($slots,$result){
+			if($this->allowed_name =="Foro Industrial"){
+				$maxSlots=8;
+			}else{
+				$maxSlots=50;
+			}
+
 			$numberofslots=0;
+
 		        foreach($slots as $slot_object)
 			{	
-
 				$numberofslots=$numberofslots+1;
+					
 				$result.= "<div class=\"slot\">";
 				$result.= "<div class=\"time_details\">" . $slot_object->time . '</div> ' ; //imprime hora + espacio
 				$result.= "<div class=\"sessions\">";
@@ -70,7 +77,7 @@ class PartialProgramWriter
 				$result.= "</div></div>";
 				
 				//the counter is hardcoded. bad design :S		
-				if(strpos($result, 'talk') !== false && $numberofslots<5){
+				if(strpos($result, 'talk') !== false && $numberofslots<$maxSlots){
 					echo $result;
 					$result='';
 				}
@@ -248,14 +255,14 @@ class FullProgramWriter{
 					}else if($talk_group instanceof TalkGroup){
 						echo "<div class=\"session\">".
 							"<div class=\"session_name\">".$talk_group->title."</div>".
-							"<div class=\"session_details\">Chair: ".$talk_group->chair. '- Room:'.$talk_group->room .'</div>'.
+							"<div class=\"session_details\">Chair: ".$talk_group->chair. ' - Room: '.$talk_group->room .'</div>'.
 						"</div>";    
 		 
 					foreach($talk_group->talks as $talk){
 							$not_allowed = array("");
 								if(!in_array($talk->event,$not_allowed )){
 									echo "<div class=\"talk\">".
-									"<div class=\"talk_name\">". $talk->title.". </div>".
+									"<div class=\"talk_name\">". $talk->title."<span> <i>(". $talk->event.") </i> </span></div>".
 									"<div class=\"talk_authors\">". $talk->authors."</div>".
 									"<div class=\"talk_data\">";
 										if($talk->timming!=""){
@@ -293,11 +300,11 @@ class FullProgramWriter{
 			      
 						if($talk_group->title == "" && !empty($talk_group->talks)){//Es uno de los eventos a mostrar
 							foreach($talk_group->talks as $talk){
-									echo "<div class=\"talk_pre\">"."<b>". $talk->event."</b>".': '. $talk->title;
+									echo "<div class=\"talk_pre\">"."Room: ".$talk->room .' - <b>'. $talk->event."</b>".': '. $talk->title;
 									if($talk->authors!=""){
 										echo " - "."<div class=\"talk_authors\">". $talk->authors."</div>" ;
 									}
-								echo  '</div>'; 	
+								echo '</div>'; 	
 							}
 						}else if($talk_group->title == "" && empty($talk_group->talks)){//es un hueco
 							echo "<div class=\"talk_pre\"></div>";
