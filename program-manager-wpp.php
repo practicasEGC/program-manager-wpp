@@ -116,7 +116,7 @@ function write_foro(){
 	
 	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
 	$program=$reader->parseProgram($pre_days,$main_days);
-	$writer=new PartialProgramWriter($program,"Foro Industrial"); 
+	$writer=new PartialProgramWriter($program,"Foro Industrial <div><i>Room: Salón de actos</i></div>"); 
 	$writer->write();
 }
 
@@ -153,7 +153,7 @@ function write_dc(){
 //	print_r($pre_days);print_r($main_days);print($pre_xlsx);print($main_xlsx);die();
 	$reader = new XLSXProgramReader($pre_xlsx,$main_xlsx);
 	$program=$reader->parseProgram($pre_days,$main_days);	
-	$writer=new PartialProgramWriter($program,"Doctoral Symposium"); 
+	$writer=new PartialProgramWriter($program,"Doctoral Symposium <div><i>Room: AULA 1</i></div>"); 
 	$writer->write();
 }
 

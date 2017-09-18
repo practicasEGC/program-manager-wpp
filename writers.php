@@ -34,14 +34,14 @@ class PartialProgramWriter
 
 
 	function process_day($slots,$result){
-			if($this->allowed_name =="Foro Industrial"){
+			if($this->allowed_name ==="Foro Industrial <div><i>Room: Salón de actos</i></div>"){
 				$maxSlots=8;
 			}else{
 				$maxSlots=50;
 			}
 
 			$numberofslots=0;
-
+			
 		        foreach($slots as $slot_object)
 			{	
 				$numberofslots=$numberofslots+1;
@@ -56,7 +56,7 @@ class PartialProgramWriter
 							$result.= "<div class=\"session\">";
 							$result.= "<div class=\"session_name\">".$talk_group->title. '</div>';
 						        $result.= '</div>';
-						}else if($talk_group instanceof TalkGroup &&(trim($talk_group->title) == trim($this->allowed_name)) ){
+						}else if($talk_group instanceof TalkGroup && ( trim($talk_group->title) == trim($this->allowed_name))) {
 							
 							$result.= "<div class=\"session\"></div>";    
 
@@ -77,7 +77,7 @@ class PartialProgramWriter
 				$result.= "</div></div>";
 				
 				//the counter is hardcoded. bad design :S		
-				if(strpos($result, 'talk') !== false && $numberofslots<$maxSlots){
+				if((strpos($result, 'talk') !== false) &&( $numberofslots<$maxSlots)){
 					echo $result;
 					$result='';
 				}
@@ -300,11 +300,12 @@ class FullProgramWriter{
 			      
 						if($talk_group->title == "" && !empty($talk_group->talks)){//Es uno de los eventos a mostrar
 							foreach($talk_group->talks as $talk){
-									echo "<div class=\"talk_pre\">"."Room: ".$talk->room .' - <b>'. $talk->event."</b>".': '. $talk->title;
+									echo "<div class=\"talk_pre\">".'<b>'. $talk->event."</b>".': '. $talk->title;
 									if($talk->authors!=""){
 										echo " - "."<div class=\"talk_authors\">". $talk->authors."</div>" ;
 									}
-								echo '</div>'; 	
+								echo 
+  "Room: ".$talk->room . '</div>'; 	
 							}
 						}else if($talk_group->title == "" && empty($talk_group->talks)){//es un hueco
 							echo "<div class=\"talk_pre\"></div>";
