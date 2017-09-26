@@ -189,6 +189,161 @@ class GlanceProgramWriter{
 
 	}
 }
+
+class RoomProgramWriter{
+
+	private $program;
+	private $pre_rooms = array("SUM","AULA 1","Salón de actos");
+	private $main_rooms = array("Almería","Almenara+Alanda","Málaga","Paraninfo");
+	
+	public function __construct($program){
+		$this->program=$program;
+	
+	}
+	
+
+	function write(){ 
+
+		$this->print_tab_bar($this->program);//this prints a tabular bar with cickable days
+
+		$day_index=0;
+		foreach($this->program as $day => $program_day){
+			if($day_index==0){
+				echo "<div id=\"". $day ."\" class=\"tab\">";
+			}else{
+				echo "<div id=\"". $day ."\" class=\"tab\" style=\"display:none\">";
+			}	
+			$day_index++;
+
+			echo "<h2>". $program_day->day_details ."</h2>";// we print the date
+			
+			if($program_day->is_Pre){
+				$this->process_pre_day($program_day->slots);
+			}else{
+				$this->process_main_day($program_day->slots);		
+			}
+
+		echo "</div>";
+		}
+	}
+
+	function print_tab_bar(){
+		echo "<div class=\"w3-bar w3-black\">";
+		$index = 0;
+		foreach($this->program as $day=>$program_day) {
+			if($index==0){
+				echo  "<button class=\"w3-bar-item w3-button\" style=\"background:#000\" onclick=\"openTab('".$day."')\">".$day."</button>";
+			}else{
+				echo  "<button class=\"w3-bar-item w3-button\" onclick=\"openTab('".$day."')\">".$day."</button>";
+			}
+			$index++;
+		}
+		echo "</div>";
+	}
+
+	function process_main_day($slots){
+
+		foreach($this->main_rooms as $room){
+			echo "<h2>". $room ."</h2>";// we print the date
+			
+
+			foreach($slots as $slot_object)	{	
+				$unique_elements= array();
+				
+				echo "<div class=\"slot\">";
+				echo "<div class=\"time_details\">" . $slot_object->time . '</div> ' ; //imprime hora + espacio
+				echo "<div class=\"sessions\">";
+				
+				foreach ($slot_object->talks_groups as $talk_group) {
+					if($talk_group instanceof Pause){
+							echo "<div class=\"session\">";
+							echo "<div class=\"session_name\">".$talk_group->title. '</div>';
+									   
+							echo '</div>';
+						
+					}else if($talk_group instanceof TalkGroup){
+						echo "<div class=\"session\">"."</div>";
+						
+						if($talk_group->room == $room){ 
+		 					foreach($talk_group->talks as $talk){
+								$not_allowed = array("");
+								if(!in_array($talk->event,$not_allowed )){
+									$talk->time=$slot_object->time ;
+									$unique_elements[]=$talk;
+									}
+								}
+							}
+							
+						}
+						
+						
+					}
+					if(!empty($unique_elements)){
+						$unique_elements=array_unique($unique_elements);
+						foreach($unique_elements as $talk){
+							echo $talk;
+						}
+					}
+	
+					echo "</div>";
+					echo "</div>";
+				}
+				
+			
+			}
+		}
+	function process_pre_day($slots){
+			foreach($this->pre_rooms as $room){
+				echo "<h2>". $room ."</h2>";// we print the date
+				
+				foreach($slots as $slot_object){	
+
+					$unique_elements= array();
+					
+					echo "<div class=\"slot\">";
+					echo "<div class=\"time_details\">" . $slot_object->time . '</div> ' ; //imprime hora + espacio
+					echo "<div class=\"sessions\">";
+					
+					foreach ($slot_object->talks_groups as $talk_group) {
+						if($talk_group instanceof Pause){
+							echo "<div class=\"session\">";
+							echo "<div class=\"session_name\">".$talk_group->title. '</div>';
+							echo '</div>';
+						}
+						if($talk_group instanceof TalkGroup){
+							echo "<div class=\"session\">"."</div>";
+							if( !empty($talk_group->talks)){//Es uno de los eventos a mostrar
+								foreach($talk_group->talks as $talk){
+									if($talk->room == $room){
+										$unique_elements[]=$talk;
+									}
+								}
+							}
+							
+			
+						}
+						
+					}
+					if(!empty($unique_elements)){
+						$unique_elements=array_unique($unique_elements);
+						foreach($unique_elements as $talk){
+							echo $talk;
+						}
+					}
+					
+					echo "</div>";
+					echo "</div>";
+					
+				}
+				
+
+
+		}
+
+	}
+}
+
+
 class FullProgramWriter{
 
 	private $program;

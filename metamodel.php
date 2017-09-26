@@ -51,6 +51,8 @@ class Talk
   public $authors;
   public $abstract;
   public $timming;
+  public $room;
+  
 
   public function __construct($time,$title,$event,$code, $authors, $abstract)
   {
@@ -60,6 +62,16 @@ class Talk
       $this->code=$code;
       $this->authors=$authors;
       $this->abstract=$abstract;
+  }
+
+  public function __toString()
+  {
+      $result= "<div class=\"talk\">".'<b>'. $this->event."</b>".': '. $this->title;
+      if($this->authors!=""){
+        $result=$result. " - "."<div class=\"talk_authors\">". $this->authors."</div>" ;
+      }
+      $result=$result. '</div>'; 	
+      return $result;
   }
 }
 

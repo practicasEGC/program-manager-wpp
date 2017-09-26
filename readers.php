@@ -102,11 +102,11 @@ class XLSXProgramReader
           		$code= $talk[1];
           		$title = $talk[2];
           		$authors= $talk[3];
-			$abstract= $talk[4];
-			$room =$talk[7];
+							$abstract= $talk[4];
+						  $room =$talk[8];
           		$talk = new Talk($time,$title,$event,$code, $authors, $abstract);
-			$talk->room=$room;
-			$talks_collection[]=$talk;
+							$talk->room=$room;
+							$talks_collection[]=$talk;
       		}
 	 }
     }
@@ -118,12 +118,12 @@ class XLSXProgramReader
           		$title = $talk[6];
           		$authors= $talk[7];
           		$abstract= $talk[12];
-			$timming=$talk[8];
-			$talk = new Talk($time,$title,$event,$code, $authors, $abstract);
-			$talk->timming= $timming;
-			$talks_collection[]=$talk;
-      		}
-	 }
+							$timming=$talk[8];
+							$talk = new Talk($time,$title,$event,$code, $authors, $abstract);
+							$talk->timming= $timming;
+							$talks_collection[]=$talk;
+      	}
+	 		}
     }
     return $talks_collection;
   }

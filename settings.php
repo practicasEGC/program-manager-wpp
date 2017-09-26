@@ -72,7 +72,7 @@ class MySettingsPage
 		<p>write_dspl_program: To write the DSPL program</p>
 		<p>write_array_program: To write the program metamodel</p>
 		<p>write_glance_program: To write the program at a glance</p>
-
+        <p>write_room_program: To write the listo of rooms per day<p>
 	    </div>
 	</div>
 
