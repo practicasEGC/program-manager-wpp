@@ -102,10 +102,14 @@ class XLSXProgramReader
           		$code= $talk[1];
           		$title = $talk[2];
           		$authors= $talk[3];
-							$abstract= $talk[4];
+							$timming=$talk[4];
+
+							$abstract= $talk[5];
 						  $room =$talk[8];
           		$talk = new Talk($time,$title,$event,$code, $authors, $abstract);
 							$talk->room=$room;
+							$talk->timming= $timming;
+
 							$talks_collection[]=$talk;
       		}
 	 }
